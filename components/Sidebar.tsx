@@ -1,12 +1,75 @@
 "use client";
+
 import { useState } from "react";
-import { LayoutDashboard, BriefcaseBusiness, Users, Mic2, CalendarDays, BarChart3, ShieldCheck, Send, FileText, GitCompare, KanbanSquare, ClipboardCheck, MessageCircle, UserRound, Settings, ChevronDown } from "lucide-react";
-const links = [{label:"Dashboard",icon:LayoutDashboard,id:"dashboard"},{label:"Jobs & analysis",icon:BriefcaseBusiness,id:"jobs"},{label:"Candidate pool",icon:Users,id:"candidates"},{label:"ATS Kanban",icon:KanbanSquare,id:"kanban"},{label:"Approvals inbox",icon:ClipboardCheck,id:"approvals"},{label:"Interviews",icon:Mic2,id:"interviews"},{label:"Evaluation reports",icon:FileText,id:"reports"},{label:"Compare candidates",icon:GitCompare,id:"compare"},{label:"Scheduling",icon:CalendarDays,id:"schedule"},{label:"Analytics",icon:BarChart3,id:"analytics"},{label:"Recruiter Assistant",icon:MessageCircle,id:"assistant"},{label:"Candidate portal",icon:UserRound,id:"portal"},{label:"Admin console",icon:Settings,id:"admin"},{label:"Outbox",icon:Send,id:"outbox"},{label:"Audit trail",icon:ShieldCheck,id:"audit"}];
-export default function Sidebar({role,setRole,view,setView}:{role:string,setRole:(r:string)=>void,view:string,setView:(v:string)=>void}) {
- const [open,setOpen]=useState(false); return <aside className="w-64 shrink-0 border-r border-slate-800 bg-[#0b101b] p-5 flex flex-col min-h-screen">
-  <div className="flex items-center gap-3 mb-9"><div className="w-9 h-9 rounded-xl bg-teal-300 text-slate-950 grid place-items-center font-black">T</div><div><div className="font-bold">TalentOS</div><div className="text-xs muted">AI recruiting agent</div></div></div>
-  <div className="text-[10px] uppercase tracking-widest muted mb-3">Workspace</div>
-  <nav className="space-y-1">{links.map(({label,icon:Icon,id})=><button key={id} onClick={()=>setView(id)} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-left ${view===id?"bg-teal-300/10 text-teal-200":"text-slate-400 hover:bg-slate-800"}`}><Icon size={17}/>{label}</button>)}</nav>
-  <div className="mt-auto relative"><button onClick={()=>setOpen(!open)} className="glass w-full p-3 flex items-center gap-3 text-left"><div className="w-8 h-8 rounded-full bg-indigo-400 grid place-items-center text-xs text-white">PS</div><div className="flex-1"><div className="text-sm">Priya Shah</div><div className="text-xs muted">{role}</div></div><ChevronDown size={15}/></button>{open&&<div className="absolute bottom-14 left-0 right-0 glass p-2 z-10">{["admin","recruiter","interviewer","candidate"].map(r=><button key={r} onClick={()=>{setRole(r);setOpen(false)}} className="block w-full text-left px-3 py-2 text-sm hover:bg-slate-700 rounded capitalize">{r}</button>)}</div>}</div>
- </aside>
+import {
+  BarChart3, BriefcaseBusiness, CalendarDays, ChevronDown, FileText,
+  GitCompare, LayoutDashboard, MessageCircle, Mic2, Send, Settings,
+  Users, KanbanSquare
+} from "lucide-react";
+
+type Link = { label: string; id: string; icon: typeof LayoutDashboard };
+const groups: { label: string; links: Link[] }[] = [
+  { label: "Main navigation", links: [
+    { label: "Dashboard", id: "dashboard", icon: LayoutDashboard },
+    { label: "Jobs", id: "jobs", icon: BriefcaseBusiness },
+    { label: "Candidates", id: "candidates", icon: Users },
+    { label: "Interviews", id: "interviews", icon: Mic2 },
+    { label: "Scheduling", id: "schedule", icon: CalendarDays },
+    { label: "Analytics", id: "analytics", icon: BarChart3 },
+  ] },
+  { label: "Recruitment management", links: [
+    { label: "ATS Pipeline", id: "kanban", icon: KanbanSquare },
+    { label: "Evaluation & reports", id: "reports", icon: FileText },
+    { label: "Candidate comparison", id: "compare", icon: GitCompare },
+  ] },
+  { label: "Communication", links: [
+    { label: "Recruiter Assistant", id: "assistant", icon: MessageCircle },
+    { label: "Notifications / Outbox", id: "outbox", icon: Send },
+  ] },
+];
+
+export default function Sidebar({
+  role, setRole, view, setView, onLogout
+}: {
+  role: string; setRole: (role: string) => void; view: string;
+  setView: (view: string) => void; onLogout: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <aside className="app-sidebar">
+      <div className="brand">
+        <div className="brand-mark">T</div>
+        <div><div className="brand-name">TalentOS</div><div className="brand-caption">AI recruitment workspace</div></div>
+      </div>
+      <nav className="sidebar-nav">
+        {groups.map((group) => (
+          <div className="nav-group" key={group.label}>
+            <div className="nav-group-label">{group.label}</div>
+            {group.links.map(({ label, id, icon: Icon }) => (
+              <button key={id} onClick={() => setView(id)} className={`nav-item ${view === id ? "active" : ""}`}>
+                <Icon size={17} strokeWidth={1.8} /><span>{label}</span>
+              </button>
+            ))}
+          </div>
+        ))}
+        {role === "admin" && <div className="nav-group">
+          <div className="nav-group-label">Administration</div>
+          <button onClick={() => setView("admin")} className={`nav-item ${view === "admin" ? "active" : ""}`}>
+            <Settings size={17} strokeWidth={1.8} /><span>Admin settings</span>
+          </button>
+        </div>}
+      </nav>
+      <div className="profile-wrap">
+        <button onClick={() => setOpen(!open)} className="profile-button">
+          <div className="avatar">PS</div><div className="profile-copy"><strong>Priya Shah</strong><span>{role}</span></div><ChevronDown size={16} />
+        </button>
+        {open && <div className="profile-menu">
+          {["admin", "recruiter", "interviewer", "candidate"].map((item) => (
+            <button key={item} onClick={() => { setRole(item); setOpen(false); }} className="profile-option">{item}</button>
+          ))}
+          <button onClick={onLogout} className="profile-option danger">Sign out</button>
+        </div>}
+      </div>
+    </aside>
+  );
 }
