@@ -42,7 +42,7 @@ export function JobView({id}:{id:string}) {
         <div key={String(c.id)} className="flex items-center justify-between py-2 border-b border-slate-700 last:border-0">
           <div><span className="font-medium">{c.name as string}</span><span className="text-slate-400 text-sm ml-2">{c.email as string}</span></div>
           <div className="flex items-center gap-2">
-            {c.match_score&&<span className="text-green-400 text-sm font-medium">{Math.round(c.match_score as number)}%</span>}
+            {typeof c.match_score === 'number' && <span className="text-green-400 text-sm font-medium">{Math.round(c.match_score)}%</span>}
             <span className="text-xs px-2 py-0.5 bg-slate-700 rounded">{c.stage as string||'—'}</span>
             <Link href={`/recruiter/candidates/${c.id}`} className="text-xs text-blue-400">View →</Link>
           </div>
@@ -51,4 +51,5 @@ export function JobView({id}:{id:string}) {
     </div>
   </div>);
 }
+export default JobView;
 

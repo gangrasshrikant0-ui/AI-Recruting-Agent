@@ -30,4 +30,5 @@ export function Sidebar({role}:{role:string}) {
     </div>
   );
 }
+export default Sidebar;
 

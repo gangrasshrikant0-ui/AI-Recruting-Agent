@@ -1,4 +1,4 @@
-import { generateJSON, generateText } from '../llm.js';
+import { generateJSON, generateText } from './llm.js';
 
 export async function analyzeJob(description, orgId) {
   const criteriaPrompt = `Analyze this job description and extract structured hiring criteria:\n\n${description}\n\nReturn JSON: { "title": string, "department": string, "experience": string, "education": string, "mandatorySkills": [], "preferredSkills": [], "responsibilities": [], "weights": {"technical": 0.4, "communication": 0.3, "problemSolving": 0.3}, "ambiguityFlags": [], "interviewStages": [] }`;

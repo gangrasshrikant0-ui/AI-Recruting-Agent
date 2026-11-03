@@ -31,3 +31,4 @@ SESSION_SECRET=recruiting-secret-key-32chars-min
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+

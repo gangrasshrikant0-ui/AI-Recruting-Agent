@@ -23,4 +23,5 @@ export function NewJob() {
     {result&&<div className="bg-slate-800 border border-green-700 rounded-xl p-4 text-sm text-green-300">✅ AI found {(result.criteria as Record<string,unknown[]>)?.mandatorySkills?.length??0} key skills · {(result.blueprint as Record<string,unknown[]>)?.questions?.length??0} interview questions generated</div>}
   </div>);
 }
+export default NewJob;
 

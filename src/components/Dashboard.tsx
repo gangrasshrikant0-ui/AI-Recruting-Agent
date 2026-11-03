@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-export function Dashboard() {
+export function Dashboard({ role }: { role?: string } = {}) {
   const [s,setS]=useState<Record<string,unknown>|null>(null);
   const [ap,setAp]=useState<unknown[]>([]);
   useEffect(()=>{fetch('/api/analytics').then(r=>r.json()).then(setS);fetch('/api/approvals').then(r=>r.json()).then(d=>setAp((d.approvals||[]).filter((a:Record<string,unknown>)=>a.status==='pending')));}, []);
@@ -47,4 +47,5 @@ export function Dashboard() {
     </div>
   );
 }
+export default Dashboard;
 

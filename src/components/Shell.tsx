@@ -8,4 +8,5 @@ export function Shell({children,roles}:{children:React.ReactNode;roles?:string[]
   if (roles&&!roles.includes(role)) redirect('/login');
   return <div className="flex min-h-screen bg-slate-950 text-slate-100"><Sidebar role={role}/><main className="flex-1 overflow-auto">{children}</main></div>;
 }
+export default Shell;
 

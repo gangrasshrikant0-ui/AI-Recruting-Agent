@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: { serverComponentsExternalPackages: ['better-sqlite3', 'pdf-parse', 'mammoth'] },
+  experimental: { serverComponentsExternalPackages: ['better-sqlite3'] },
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.externals.push('better-sqlite3');
@@ -9,4 +9,3 @@ const nextConfig = {
   },
 };
 module.exports = nextConfig;
-
