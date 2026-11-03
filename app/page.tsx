@@ -11,7 +11,7 @@ import AdminWorkspace from "@/components/AdminWorkspace";
 import GuidedDemo from "@/components/GuidedDemo";
 import CandidatePool from "@/components/CandidatePool";
 import { blueprint, candidates, criteria, jobs, users } from "@/lib/data";
-import { ArrowRight, Bell, BriefcaseBusiness, CheckCircle2, Clock3, Eye, EyeOff, Search, Sparkles, Users, Video } from "lucide-react";
+import { ArrowRight, Bell, BriefcaseBusiness, CheckCircle2, Clock3, Eye, EyeOff, Menu, Search, Sparkles, Users, Video, X } from "lucide-react";
 
 type Role = "admin" | "recruiter" | "interviewer" | "candidate";
 const roleDetails: Record<Role, { title: string; description: string; icon: typeof Users }> = {
@@ -53,6 +53,7 @@ export default function Home() {
   const [role, setRole] = useState<Role>("recruiter");
   const [view, setView] = useState("dashboard");
   const [toast, setToast] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const notify = (message: string) => { setToast(message); window.setTimeout(() => setToast(""), 2800); };
   const reset = async () => { await fetch("/api/reset", { method: "POST" }); notify("Demo data reset."); };
   if (authStep === "welcome") return <Welcome onStart={() => setAuthStep("roles")} />;
@@ -62,7 +63,7 @@ export default function Home() {
     view === "interviews" ? <InterviewRoom /> : view === "reports" ? <EvaluationWorkspace /> : view === "compare" ? <EvaluationWorkspace mode="compare" /> :
     view === "analytics" ? <AnalyticsWorkspace /> : view === "portal" ? <CandidatePortal /> : view === "admin" ? <AdminWorkspace /> :
     view === "candidates" ? <CandidatePool onNotify={notify} /> : ["kanban", "approvals", "schedule", "outbox", "audit", "assistant"].includes(view) ? <RecruiterWorkflow view={view as "kanban" | "approvals" | "schedule" | "outbox" | "audit" | "assistant"} /> : <JobsView onNotify={notify} />;
-  return <div className="app-shell"><Sidebar role={role} setRole={(nextRole) => setRole(nextRole as Role)} view={view} setView={setView} onLogout={() => setAuthStep("welcome")} /><main className="app-main"><header className="topbar"><div className="breadcrumb"><span>Acme Labs</span><b>/</b><strong>{view === "dashboard" ? "Overview" : view}</strong></div><div className="topbar-actions"><div className="global-search"><Search size={16} /><input placeholder="Search candidates, jobs..." aria-label="Search candidates and jobs" /></div><button className="icon-button" aria-label="Notifications"><Bell size={18} /><i /></button><div className="top-avatar">PS</div></div></header><div className="page-content">{content}</div></main>{toast && <div className="toast"><CheckCircle2 size={17} />{toast}</div>}</div>;
+  return <div className="app-shell"><Sidebar role={role} setRole={(nextRole) => setRole(nextRole as Role)} view={view} setView={setView} onLogout={() => setAuthStep("welcome")} open={sidebarOpen} onClose={() => setSidebarOpen(false)} /><button className={`sidebar-backdrop ${sidebarOpen ? "visible" : ""}`} aria-label="Close navigation" onClick={() => setSidebarOpen(false)} /><main className="app-main"><header className="topbar"><div className="topbar-leading"><button className="mobile-menu-button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} onClick={() => setSidebarOpen(!sidebarOpen)}>{sidebarOpen ? <X size={20} /> : <Menu size={20} />}</button><div className="breadcrumb"><span>Acme Labs</span><b>/</b><strong>{view === "dashboard" ? "Overview" : view}</strong></div></div><div className="topbar-actions"><div className="global-search"><Search size={16} /><input placeholder="Search candidates, jobs..." aria-label="Search candidates and jobs" /></div><button className="icon-button" aria-label="Notifications"><Bell size={18} /><i /></button><div className="top-avatar">PS</div></div></header><div className="page-content">{content}</div></main>{toast && <div className="toast"><CheckCircle2 size={17} />{toast}</div>}</div>;
 }
 
 function JobsView({ onNotify }: { onNotify: (message: string) => void }) {
