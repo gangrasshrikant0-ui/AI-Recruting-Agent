@@ -36,6 +36,7 @@ export async function GET(req: NextRequest) {
       totalInterviews: totalIvsRow?.c || 0,
       totalEvaluations: totalEvalsRow?.c || 0,
       byStage,
+      byStageList: stageRows.map((r) => ({ stage: r.stage, count: r.count })),
       verdicts,
     };
 
