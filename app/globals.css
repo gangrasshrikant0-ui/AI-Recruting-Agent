@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #f7f9fc; color: #172033; font-family: Arial, Helvetica, sans-serif; }
+button, input, textarea, select { font: inherit; }
+.glass { background: #ffffff; border: 1px solid #dfe5ee; border-radius: 14px; box-shadow: 0 8px 24px rgba(34, 52, 84, .06); }
+.muted { color: #667085; }
+.accent { color: #0b8f79; }
+.dark body { background: #080b12; color: #e5e7eb; }
+.dark .glass { background: linear-gradient(135deg, rgba(20,29,47,.95), rgba(11,17,29,.95)); border-color: #26334a; }
+.dark .muted { color: #8d9ab0; }

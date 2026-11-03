@@ -1,0 +1,4 @@
+export type Job = { id: string; type: "bulk-import" | "outreach" | "resume-parsing"; status: "queued" | "running" | "completed" | "failed"; attempts: number; createdAt: string; error?: string };
+export const jobs: Job[] = [];
+export async function enqueue(type: Job["type"], work: () => Promise<void> | void) { const job: Job = { id: crypto.randomUUID(), type, status: "queued", attempts: 0, createdAt: new Date().toISOString() }; jobs.unshift(job); try { job.status = "running"; job.attempts += 1; await work(); job.status = "completed"; } catch (error) { job.status = "failed"; job.error = error instanceof Error ? error.message : "Job failed"; } return job; }
+export async function retryJob(id: string) { const job = jobs.find((item) => item.id === id); if (!job) throw new Error("Queue job not found"); job.status = "queued"; job.error = undefined; return job; }
